@@ -7,15 +7,20 @@ package ru.hiber.logic;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateError;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import ru.hiber.model.Item;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Class ToDoLogic -
@@ -48,48 +53,53 @@ public enum ToDoLogic {
         return null;
     }
 
-    public void save(Item item) {
-        try (Session session = FACTORY.openSession()) {
-            session.getTransaction().begin();
-            session.save(item);
-            session.getTransaction().commit();
+    private <R> R execute(final Function<Session, R> run) {
+        final Session session = FACTORY.openSession();
+        final Transaction tr = session.getTransaction();
+        tr.begin();
+        try {
+            R rsl = run.apply(session);
+            tr.commit();
+            return rsl;
+        } catch (HibernateError e) {
+            tr.rollback();
+            LOG.error("hibernate error", e);
+        } finally {
+            session.close();
         }
+        return null;
+    }
+
+    public void save(Item item) {
+        LOGIC.execute(ses -> {
+            ses.save(item);
+            return null;
+        });
     }
 
     public void update(Item item) {
-        try (Session session = FACTORY.openSession()) {
-            session.getTransaction().begin();
-            session.saveOrUpdate(item);
-            session.getTransaction().commit();
-        }
+        LOGIC.execute(ses -> {
+            ses.update(item);
+            return null;
+        });
     }
 
     public Item get(Item item) {
-        Item answer = null;
-        try (Session session = FACTORY.openSession()) {
-            session.getTransaction().begin();
-            answer = session.get(Item.class, item.getId());
-            session.getTransaction().commit();
-        }
-        return answer;
+        return LOGIC.execute((ses) -> ses.get(Item.class, item.getId()));
     }
 
     public void delete(Item item) {
-        try (Session session = FACTORY.openSession()) {
-            session.getTransaction().begin();
-            session.delete(item);
-            session.getTransaction().commit();
-        }
+        LOGIC.execute(ses -> {
+            ses.delete(item);
+            return null;
+        });
     }
 
     public List<Item> getAll() {
-        List<Item> asnwer = null;
-        try (Session session = FACTORY.openSession()) {
-            session.getTransaction().begin();
-            asnwer = session.createQuery("from Item").list();
-            session.getTransaction().commit();
-        }
-        return asnwer;
+        return LOGIC.execute((ses) -> {
+            Query q = ses.createQuery("from Item");
+            return q.list();
+        });
     }
 
 }
