@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Hibernate, Relational Persistence for Idiomatic Java
+  ~
+  ~ License: GNU Lesser General Public License (LGPL), version 2.1 or later.
+  ~ See the lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>.
+  -->
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="ru.hiber.car">
+
+    <class name="Car" table="Cars">
+        <id name="id" column="CAR_ID" type="int">
+            <generator class="increment"/>
+        </id>
+        <property name="model" column="MODEL" type="java.lang.String"/>
+
+        <many-to-one name="engine" column="ENGINE_ID" class="Engine" />
+
+        <set name="owners" table="History" lazy="true" fetch="select">
+            <key column="car_id" not-null="true"/>
+            <many-to-many entity-name="ru.hiber.car.Driver">
+                <column name="driver_id" not-null="true"/>
+            </many-to-many>
+        </set>
+    </class>
+
+</hibernate-mapping>
