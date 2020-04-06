@@ -8,10 +8,13 @@ package ru.hiber.car;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.persistence.*;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * Class Driver -
@@ -20,12 +23,21 @@ import java.util.Set;
  * @version 0.1
  * @since 06.04.2020
  */
+@Entity
+@Table(name = "drivers")
 public class Driver {
 
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     private int id;
 
     private String name;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "history", joinColumns = {
+            @JoinColumn(name = "car_id", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "driver_id",
+                    nullable = false, updatable = false) })
     private Set<Car> cars = new HashSet<>();
 
     public Driver() {

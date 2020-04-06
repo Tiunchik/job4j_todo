@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 import ru.hiber.car.Car;
 import ru.hiber.car.Driver;
 import ru.hiber.car.Engine;
@@ -29,18 +30,21 @@ import java.util.Set;
 public class CarStart {
     private static final Logger LOG = LogManager.getLogger(CarStart.class.getName());
 
-    private static SessionFactory getFactory() {
-        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .configure()
-                .build();
-        try {
-            return new MetadataSources(registry).buildMetadata().buildSessionFactory();
-        } catch (Exception e) {
-            LOG.error("Make factory error", e);
-            StandardServiceRegistryBuilder.destroy(registry);
-        }
+    public static SessionFactory getFactory() {
+            try {
+                Configuration configuration = new Configuration().configure();
+                configuration.addAnnotatedClass(Car.class);
+                configuration.addAnnotatedClass(Engine.class);
+                configuration.addAnnotatedClass(Driver.class);
+                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+                sesfactory = configuration.buildSessionFactory(builder.build());
+                return sesfactory;
+
+            } catch (Exception e) {
+                LOG.error("Make factory error", e);
+            }
         return null;
-    }
+        }
 
     private static SessionFactory sesfactory = getFactory();
 

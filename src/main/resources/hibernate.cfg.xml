@@ -32,12 +32,12 @@
         <property name="show_sql">true</property>
 
         <!-- Drop and re-create the database schema on startup-->
-        <property name="hbm2ddl.auto">create</property>
+        <property name="hbm2ddl.auto">validate</property>
 
         <!-- Path to *.hbm.xml file to each class -->
-        <mapping resource="ru.hiber.car/Car.hbm.xml"/>
-        <mapping resource="ru.hiber.car/Engine.hbm.xml"/>
-        <mapping resource="ru.hiber.car/Driver.hbm.xml"/>
+<!--        <mapping resource="ru.hiber.car/Car.hbm.xml"/>-->
+<!--        <mapping resource="ru.hiber.car/Engine.hbm.xml"/>-->
+<!--        <mapping resource="ru.hiber.car/Driver.hbm.xml"/>-->
 
     </session-factory>
 

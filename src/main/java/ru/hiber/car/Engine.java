@@ -8,7 +8,10 @@ package ru.hiber.car;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.persistence.*;
 import java.util.Objects;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * Class Утпшту -
@@ -17,8 +20,12 @@ import java.util.Objects;
  * @version 0.1
  * @since 06.04.2020
  */
+@Entity
+@Table(name = "engines")
 public class Engine {
 
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     private int id;
 
     private String type;
