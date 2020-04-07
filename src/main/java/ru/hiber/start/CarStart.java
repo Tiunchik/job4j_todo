@@ -30,24 +30,34 @@ import java.util.Set;
 public class CarStart {
     private static final Logger LOG = LogManager.getLogger(CarStart.class.getName());
 
-    public static SessionFactory getFactory() {
-            try {
-                Configuration configuration = new Configuration().configure();
-                configuration.addAnnotatedClass(Car.class);
-                configuration.addAnnotatedClass(Engine.class);
-                configuration.addAnnotatedClass(Driver.class);
-                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-                sesfactory = configuration.buildSessionFactory(builder.build());
-                return sesfactory;
+    public static SessionFactory createFacrory() {
+        try {
+            Configuration configuration = new Configuration().configure();
+            configuration.addAnnotatedClass(Car.class);
+            configuration.addAnnotatedClass(Engine.class);
+            configuration.addAnnotatedClass(Driver.class);
+            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+            sesfactory = configuration.buildSessionFactory(builder.build());
+            return sesfactory;
 
-            } catch (Exception e) {
-                LOG.error("Make factory error", e);
-            }
-        return null;
+        } catch (Exception e) {
+            LOG.error("Make factory error", e);
         }
+        return null;
+    }
 
-    private static SessionFactory sesfactory = getFactory();
+    private static SessionFactory sesfactory = null;
 
+    public static SessionFactory getFactory() {
+        if (sesfactory == null) {
+            sesfactory = createFacrory();
+        }
+        return sesfactory;
+    }
+
+    /**
+     * Test of creating and adding objects to hibarDB via hibarnate API
+     */
     public void create() {
         Session session = CarStart.getFactory().openSession();
         session.getTransaction().begin();
@@ -65,6 +75,9 @@ public class CarStart {
         session.getTransaction().commit();
     }
 
+    /**
+     * Test of updating objects in hibarDB via hibarnate API
+     */
     public void update() {
         Session session = CarStart.getFactory().openSession();
         session.getTransaction().begin();
@@ -75,6 +88,9 @@ public class CarStart {
         session.getTransaction().commit();
     }
 
+    /**
+     * Test of deleting objects from hibarDB via hibarnate API
+     */
     public void delete() {
         Session session = CarStart.getFactory().openSession();
         session.getTransaction().begin();

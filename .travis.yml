@@ -6,8 +6,8 @@ jdk:
 services:
   - postgresql
 
-#before_install:
-#  - psql -c 'create database cinema;' -U postgres
+before_install:
+  - psql -c 'create database hiber;' -U postgres
 
 # после выполнения сборки запустить скрипт, который будет собирать статистику по JaCoCo
 # Здесь используется сторонни сервис https://codecov.io/

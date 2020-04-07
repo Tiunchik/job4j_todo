@@ -34,14 +34,14 @@ public class Car {
     private String model;
 
     @ManyToOne
-    @JoinColumn(name="engine_id", foreignKey = @ForeignKey(name = "ENGINE_IF_FK"))
+    @JoinColumn(name = "engine_id", foreignKey = @ForeignKey(name = "ENGINE_IF_FK"))
     private Engine engine;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "history", joinColumns = {
-            @JoinColumn(name = "driver_id", nullable = false, updatable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "car_id",
-                    nullable = false, updatable = false) })
+            @JoinColumn(name = "driver_id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "car_id",
+                    nullable = false, updatable = false)})
     private Set<Driver> owners = new HashSet<>();
 
     public Car() {
