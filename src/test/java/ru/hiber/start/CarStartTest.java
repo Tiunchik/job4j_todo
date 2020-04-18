@@ -9,9 +9,17 @@ import static org.junit.Assert.*;
 
 public class CarStartTest {
 
+    private Session getSes() {
+        Session session = CarStart.getFactory().getCurrentSession();
+        if (session == null) {
+            session = CarStart.getFactory().openSession();
+        }
+        return session;
+    }
+
     public void create() {
-        Session session = CarStart.getFactory().openSession();
-        session.getTransaction().begin();
+        Session session = getSes();
+        session.beginTransaction();
         Car car1 = new Car(1);
         Car car2 = new Car(1);
         Driver driver1 = new Driver(1);
@@ -27,8 +35,8 @@ public class CarStartTest {
     }
 
     public void update() {
-        Session session = CarStart.getFactory().openSession();
-        session.getTransaction().begin();
+        Session session = getSes();
+        session.beginTransaction();
         Driver driver1 = session.get(Driver.class, 1);
         driver1.setName("Volvo");
         Car car1 = session.get(Car.class, 1);
@@ -37,8 +45,8 @@ public class CarStartTest {
     }
 
     public void delete() {
-        Session session = CarStart.getFactory().openSession();
-        session.getTransaction().begin();
+        Session session = getSes();
+        session.beginTransaction();
         Driver driver1 = session.get(Driver.class, 1);
         session.delete(driver1);
         session.getTransaction().commit();
