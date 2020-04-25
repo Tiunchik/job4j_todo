@@ -104,19 +104,16 @@ public enum HiberDB {
      */
     public void baseAction(Consumer<Session> action) {
         Transaction tran = null;
-        Session session = HIBER_DB.getFactory().openSession();
-        try {
+        try (Session session = HIBER_DB.getFactory().openSession()){
             tran = session.getTransaction();
             tran.begin();
             action.accept(session);
             tran.commit();
-            session.close();
         } catch (Exception e) {
             if (tran != null) {
                 tran.rollback();
             }
             LOG.error(LOAD_ERRORS, e);
-            session.close();
         }
     }
 
@@ -127,13 +124,13 @@ public enum HiberDB {
      */
     public <E> E baseQuaery(Function<Session, E> action) {
         E answer = null;
-        Session session = HIBER_DB.getFactory().openSession();
-        try {
+        Transaction tran = null;
+        try (Session session = HIBER_DB.getFactory().openSession()) {
+            tran = session.beginTransaction();
             answer = action.apply(session);
-            session.close();
+            tran.commit();
         } catch (NoResultException e) {
             LOG.info(NO_ENTITY_FOUND_FOR_QUERY);
-            session.close();
         }
         return answer;
     }
@@ -312,7 +309,10 @@ public enum HiberDB {
      * @return fullfilled advertisement
      */
     public Advertisement getAdd(Advertisement adv) {
-        return baseQuaery(session -> session.get(Advertisement.class, adv.getId()));
+        return baseQuaery(session -> {
+            session.get(Advertisement.class, adv.getId());
+            return session.get(Advertisement.class, adv.getId());
+        });
     }
 
     /**
@@ -377,7 +377,7 @@ public enum HiberDB {
         try {
             tran = session.getTransaction();
             tran.begin();
-            user = session.get(User.class, user.getId());
+            session.refresh(user);
             car.addEngine(eng);
             adv.addCar(car);
             user.addAdv(adv);
