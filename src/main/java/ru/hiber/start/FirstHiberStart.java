@@ -12,7 +12,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import ru.hiber.model.User;
+import ru.hiber.models.User;
 
 import java.sql.Timestamp;
 import java.util.List;

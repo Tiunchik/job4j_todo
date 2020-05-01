@@ -12,7 +12,7 @@
 
 <hibernate-mapping package="ru.hiber.model">
 
-    <class name="User" table="Users">
+    <class name="ru.hiber.models.User" table="Users">
         <id name="id" column="USER_ID">
             <generator class="identity"/>
         </id>

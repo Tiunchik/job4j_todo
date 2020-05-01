@@ -5,20 +5,15 @@
  */
 package ru.hiber.start;
 
-import com.sun.xml.bind.v2.runtime.reflect.Lister;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import ru.hiber.car.Car;
-import ru.hiber.car.Driver;
-import ru.hiber.car.Engine;
-
-import java.util.Set;
+import ru.hiber.models.Car;
+import ru.hiber.models.Driver;
+import ru.hiber.models.Engine;
 
 /**
  * Class CarStart -

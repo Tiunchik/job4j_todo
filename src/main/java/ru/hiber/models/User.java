@@ -3,10 +3,7 @@
  *
  * @author Maksim Tiunchik
  */
-package ru.hiber.model;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+package ru.hiber.models;
 
 import java.sql.Timestamp;
 import java.util.Objects;

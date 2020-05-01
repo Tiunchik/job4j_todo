@@ -3,13 +3,9 @@
  *
  * @author Maksim Tiunchik
  */
-package ru.hiber.car;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+package ru.hiber.models;
 
 import javax.persistence.*;
-import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;

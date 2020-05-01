@@ -2,8 +2,8 @@ package ru.hiber.start;
 
 import org.hibernate.Session;
 import org.junit.Test;
-import ru.hiber.car.Car;
-import ru.hiber.car.Driver;
+import ru.hiber.models.Car;
+import ru.hiber.models.Driver;
 
 import static org.junit.Assert.*;
 

@@ -12,18 +12,16 @@
 
 <hibernate-mapping package="ru.hiber.car">
 
-    <class name="Car" table="Cars">
-        <id name="id" column="CAR_ID" type="int">
+    <class name="ru.hiber.models.Driver" table="drivers">
+        <id name="id" column="DRIVER_ID" type="int">
             <generator class="increment"/>
         </id>
-        <property name="model" column="MODEL" type="java.lang.String"/>
+        <property name="name" column="NAME" type="java.lang.String"/>
 
-        <many-to-one name="engine" column="ENGINE_ID" class="Engine" />
-
-        <set name="owners" table="History" lazy="true" fetch="select">
-            <key column="car_id" not-null="true"/>
-            <many-to-many entity-name="ru.hiber.car.Driver">
-                <column name="driver_id" not-null="true"/>
+        <set name="cars" table="History" lazy="true" fetch="select">
+            <key column="driver_id" not-null="true"/>
+            <many-to-many entity-name="ru.hiber.models.Car">
+                <column name="car_id" not-null="true"/>
             </many-to-many>
         </set>
     </class>
